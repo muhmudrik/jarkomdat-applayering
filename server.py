@@ -25,15 +25,12 @@ def listener(client, address):
     print("Accepted connection from: ", address)
     with clients_lock:
         clients.add(client)
-        print(clients)
     try:    
         while True:
             current_time = datetime.now().strftime("%H:%M:%S")
             data = json.loads(client.recv(2048).decode())
             
             resp = f"{current_time} {data['nama']}: {data['message']}"
-            # json.dumps(data).encode()
-            # json.loads(data.decode())
             
             if not data:
                 break

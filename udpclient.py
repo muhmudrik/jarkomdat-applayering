@@ -12,17 +12,16 @@ data['nama'] = nama
 data['status'] = "nama"
 
 # Connect Server
-server = (host, 5000)
-s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-# s.bind((host,port))
+server = (host, port)
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 print(f"Koneksi ke {host}:{port} Berhasil!")
-s.sendto(json.dumps(data).encode(),server)
+s.sendto(json.dumps(data).encode(), server)
 
 # Receive function for threading
 def ReceiveData(sock):
     while True:
         try:
-            data,addr = sock.recvfrom(1024)
+            data,addr = sock.recvfrom(2048)
             print(data.decode())
         except:
             pass
@@ -35,6 +34,11 @@ while True:
     data['message'] = word
     data['status'] = "message"
     s.sendto(json.dumps(data).encode(),server)
+
+    # Quit
+    if word == "quit":
+        s.close()
+        os._exit(1)
 
 s.sendto(data.encode('utf-8'),server)
 s.close()
